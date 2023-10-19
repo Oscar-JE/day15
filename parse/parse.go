@@ -1,10 +1,28 @@
 package parse
 
 import (
+	"bufio"
+	"day15/sensorandbeacon"
 	"day15/vec"
+	"os"
 	"strconv"
 	"strings"
 )
+
+func Parse(filepath string) []sensorandbeacon.SensorAndBeacon {
+	file, fileErr := os.Open(filepath)
+	if fileErr != nil {
+		panic("file open failed")
+	}
+	scanner := bufio.NewScanner(file)
+	sensorPairs := []sensorandbeacon.SensorAndBeacon{}
+	for scanner.Scan() {
+		line := scanner.Text()
+		sensor, beacon := parseLine(line)
+		sensorPairs = append(sensorPairs, sensorandbeacon.Init(sensor, beacon))
+	}
+	return sensorPairs
+}
 
 func parseLine(line string) (vec.Point, vec.Point) {
 	sensorAndBeacon := strings.Split(line, ":")
