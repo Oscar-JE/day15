@@ -20,6 +20,6 @@ func abs(x int) int {
 	return x
 }
 
-func (p Point) ManhattanDist(other Point) int {
-	return abs(p.x-other.x) + abs(p.y+other.y)
+func ManhattanDist(a Point, b Point) int {
+	return abs(a.x-b.x) + abs(a.y+b.y)
 }
