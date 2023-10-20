@@ -37,11 +37,18 @@ func (i Interval) InClosure(element int) bool {
 	return i.lowerBound <= element && element <= i.upperBound
 }
 
-func (i Interval) In(element int) bool {
+func (i Interval) Has(element int) bool {
 	return i.lowerBound < element && element < i.upperBound
 }
 
 func (i *Interval) Absorb(other Interval) {
 	i.lowerBound = min(i.lowerBound, other.lowerBound)
 	i.upperBound = max(i.upperBound, other.upperBound)
+}
+
+func (i Interval) Split(element int) []Interval {
+	if i.Has(element) {
+		return []Interval{{i.lowerBound, element}, {element, i.upperBound}}
+	}
+	return []Interval{i}
 }
