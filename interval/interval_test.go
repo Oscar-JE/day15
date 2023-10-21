@@ -42,3 +42,67 @@ func TestIntersectsClosureOverlapped(t *testing.T) {
 		t.Errorf("symmetric")
 	}
 }
+
+/*
+ *               12 ########### 22
+ * A   5---10
+ * B   5-------------------20
+ * C                  15---20
+ * D   5-----------------------------------30
+ * E                       20--------------30
+ * F                                 25----30
+ */
+
+func TheStaticInterval() Interval {
+	return Init(12, 22)
+}
+
+func TestShouldMergeNotA(t *testing.T) {
+	GeneralTest(Init(5, 10), false, t)
+}
+
+func TestShouldMergeNotB(t *testing.T) {
+	GeneralTest(Init(5, 20), true, t)
+}
+
+func TestShouldMergeNotC(t *testing.T) {
+	GeneralTest(Init(15, 20), true, t)
+}
+
+func TestShouldMergeNotD(t *testing.T) {
+	GeneralTest(Init(5, 30), true, t)
+}
+
+func TestShouldMergeNotE(t *testing.T) {
+	GeneralTest(Init(20, 30), true, t)
+}
+
+func TestShouldMergeNotF(t *testing.T) {
+	GeneralTest(Init(25, 30), false, t)
+}
+
+func TestShouldMergeNotG(t *testing.T) {
+	GeneralTest(Init(5, 12), false, t)
+}
+
+func TestShouldMergeNotH(t *testing.T) {
+	GeneralTest(Init(22, 30), false, t)
+}
+
+func TestShouldMergeNotI(t *testing.T) {
+	GeneralTest(Init(5, 13), true, t)
+}
+
+func TestShouldMergeNotJ(t *testing.T) {
+	GeneralTest(Init(21, 30), true, t)
+}
+
+func TestShouldMergeNotK(t *testing.T) {
+	GeneralTest(Init(12, 22), true, t)
+}
+
+func GeneralTest(movingInterval Interval, expected bool, t *testing.T) {
+	if ShouldMerge(TheStaticInterval(), movingInterval) != expected {
+		t.Errorf("(%d, %d)", movingInterval.lowerBound, movingInterval.upperBound)
+	}
+}

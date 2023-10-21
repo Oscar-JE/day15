@@ -52,3 +52,27 @@ func (i Interval) Split(element int) []Interval {
 	}
 	return []Interval{i}
 }
+
+func ShouldMerge(first Interval, second Interval) bool {
+	lower := first.Has(second.lowerBound)
+	upper := first.Has(second.upperBound)
+	lowerI := second.Has(first.lowerBound)
+	upperI := second.Has(first.upperBound)
+	equals := first.Eq(second)
+	return lower || upper || lowerI || upperI || equals
+}
+
+func (i *Interval) RemoveEdge(element int) {
+	if element == i.lowerBound+1 {
+		i.lowerBound += 1
+	} else if element == i.upperBound-1 {
+		i.upperBound -= 1
+	}
+}
+
+func (i Interval) GetLowerBound() int {
+	return i.lowerBound
+}
+func (i Interval) GetUpperBound() int {
+	return i.upperBound
+}

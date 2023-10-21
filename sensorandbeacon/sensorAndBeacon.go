@@ -4,6 +4,7 @@ import (
 	"day15/integermath"
 	"day15/interval"
 	"day15/vec"
+	"fmt"
 )
 
 type SensorAndBeacon struct {
@@ -17,15 +18,17 @@ func Init(sensor vec.Point, beacon vec.Point) SensorAndBeacon {
 
 func (sb SensorAndBeacon) ExcludedIntervalAtRow(row int) interval.Interval {
 	dist := vec.ManhattanDist(sb.sensor, sb.beacon)
-	heightDif := integermath.Abs(sb.sensor.GetY())
+	heightDif := integermath.Abs(sb.sensor.GetY() - row)
 	halfLength := dist - heightDif + 1
-	return interval.Init(sb.sensor.GetX()-halfLength, sb.sensor.GetX()+halfLength)
+	retInverval := interval.Init(sb.sensor.GetX()-halfLength, sb.sensor.GetX()+halfLength)
+	/*
+		 use if part one
+		if sb.beacon.GetY() == row {
+			retInverval.RemoveEdge(sb.beacon.GetX())
+		}*/
+	return retInverval
 }
 
-func (sb SensorAndBeacon) ExcludedIntervalsAtRow(row int) []interval.Interval {
-	bigInterval := sb.ExcludedIntervalAtRow(row) // Men jag vet att det kommer bara vara på kanterna eller hur ?
-	if sb.beacon.GetY() == row && bigInterval.Has(sb.beacon.GetX()) {
-		return bigInterval.Split(sb.beacon.GetX())
-	}
-	return []interval.Interval{bigInterval}
+func (sb SensorAndBeacon) String() string {
+	return fmt.Sprintf("s{%d,%d}-b{%d,%d}", sb.sensor.GetX(), sb.sensor.GetY(), sb.beacon.GetX(), sb.beacon.GetY())
 }
